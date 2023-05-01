@@ -27,11 +27,11 @@ services:
 
   niffler-auth:
     container_name: niffler-auth
-    image: dtuchs/niffler-auth:latest
+    image: nelakov/niffler-auth:latest
     ports:
-      - "9000:9000"
+      - "9001:9001"
     healthcheck:
-      test: "wget --spider http://localhost:9000/actuator/health || exit 1"
+      test: "wget --spider http://localhost:9001/actuator/health || exit 1"
       interval: 5s
       timeout: 5s
       retries: 10
@@ -44,7 +44,7 @@ services:
 
   niffler-currency:
     container_name: niffler-currency
-    image: dtuchs/niffler-currency:latest
+    image: nelakov/niffler-currency:latest
     expose:
       - "8091"
       - "8092"
@@ -57,7 +57,7 @@ services:
 
   niffler-gateway:
     container_name: niffler-gateway
-    image: dtuchs/niffler-gateway:latest
+    image: nelakov/niffler-gateway:latest
     ports:
       - "8090:8090"
     depends_on:
@@ -69,7 +69,7 @@ services:
 
   niffler-spend:
     container_name: niffler-spend
-    image: dtuchs/niffler-spend:latest
+    image: nelakov/niffler-spend:latest
     expose:
       - "8093"
     depends_on:
@@ -81,7 +81,7 @@ services:
 
   niffler-userdata:
     container_name: niffler-userdata
-    image: dtuchs/niffler-userdata:latest
+    image: nelakov/niffler-userdata:latest
     expose:
       - "8089"
     depends_on:
@@ -93,7 +93,7 @@ services:
 
   niffler-frontend:
     container_name: niffler-frontend
-    image: dtuchs/niffler-frontend-test:latest
+    image: nelakov/niffler-frontend-test:latest
     ports:
       - "80:80"
     depends_on:
@@ -132,7 +132,7 @@ services:
 
   niffler-e-2-e:
     container_name: niffler-e-2-e
-    image: dtuchs/niffler-e-2-e-tests
+    image: nelakov/niffler-e-2-e-tests
     depends_on:
       niffler-frontend:
         condition: service_started
