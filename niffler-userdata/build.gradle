@@ -38,8 +38,8 @@ dependencies {
 
 docker {
     dependsOn build
-    name "dtuchs/niffler-userdata:${project.version}"
-    tag 'latest', 'dtuchs/niffler-userdata:latest'
+    name "nelakov/niffler-userdata:${project.version}"
+    tag 'latest', 'nelakov/niffler-userdata:latest'
     files bootJar.archiveFile
     buildArgs([APP_VER: project.version, DOCKER: project.ext.dockerImage])
     noCache true

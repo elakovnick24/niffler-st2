@@ -1,8 +1,9 @@
 package niffler.jupiter.annotation;
 
+import niffler.jupiter.extension.GenerateCategoryExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import niffler.jupiter.extension.BrowserExtension;
 import niffler.jupiter.extension.GenerateSpendExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
