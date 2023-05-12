@@ -1,4 +1,4 @@
-package niffler.page;
+package niffler.test.page;
 
 import org.openqa.selenium.By;
 

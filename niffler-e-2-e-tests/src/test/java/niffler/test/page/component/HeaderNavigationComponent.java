@@ -1,8 +1,7 @@
-package niffler.page.component;
+package niffler.test.page.component;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import niffler.page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.$;
 

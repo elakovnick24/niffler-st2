@@ -6,9 +6,9 @@ import niffler.jupiter.annotation.ClassPathUser;
 import niffler.jupiter.annotation.GenerateCategory;
 import niffler.model.CategoryJson;
 import niffler.model.UserJson;
-import niffler.page.LoginPage;
-import niffler.page.ProfilePage;
-import niffler.page.component.HeaderNavigationComponent;
+import niffler.test.page.LoginPage;
+import niffler.test.page.ProfilePage;
+import niffler.test.page.component.HeaderNavigationComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
