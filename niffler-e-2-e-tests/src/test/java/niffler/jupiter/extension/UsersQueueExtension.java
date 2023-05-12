@@ -31,7 +31,7 @@ public class UsersQueueExtension implements
 
   static {
     USERS_WITH_FRIENDS_QUEUE.addAll(
-        List.of(userJson("dima", "12345"), userJson("barsik", "12345"))
+        List.of(userJson("dima", "12345"), userJson("kyle", "12345"))
     );
     USERS_INVITATION_SENT_QUEUE.addAll(
         List.of(userJson("emma", "12345"), userJson("emily", "12345"))

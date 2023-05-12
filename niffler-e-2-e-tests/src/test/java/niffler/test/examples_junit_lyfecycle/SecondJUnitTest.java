@@ -1,11 +1,11 @@
-package niffler.test;
+package niffler.test.examples_junit_lyfecycle;
 
 import niffler.jupiter.extension.CallBackExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(CallBackExtension.class)
-public class SecondJUnitTest extends BaseTest{
+public class SecondJUnitTest {
 
     @AfterAll
     static void afterAll() {

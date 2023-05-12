@@ -2,7 +2,6 @@ package niffler.jupiter.extension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import niffler.model.UserJson;
-import niffler.test.LoginTest;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.ArgumentConverter;

@@ -1,40 +1,33 @@
 package niffler.test.web;
 
-package niffler.test;
-
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Selenide;
+import io.qameta.allure.Allure;
+import niffler.jupiter.annotation.ClassPathUser;
 import niffler.jupiter.annotation.GenerateCategory;
 import niffler.jupiter.annotation.GenerateSpend;
-import niffler.jupiter.extension.GenerateSpendExtension;
 import niffler.model.CurrencyValues;
 import niffler.model.SpendJson;
-import niffler.test.BaseTest;
+import niffler.model.UserJson;
+import niffler.page.LoginPage;
+import niffler.page.MainPage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @Disabled
-@ExtendWith(GenerateSpendExtension.class)
 public class SpendsWebTest extends BaseWebTest {
 
+    LoginPage loginPage = new LoginPage();
+    MainPage mainPage = new MainPage();
     @BeforeEach
     void doLogin() {
-        Selenide.open("/main");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("Nick");
-        $("input[name='password']").setValue("123qweasd");
-        $("button[type='submit']").click();
+        Allure.step("open page", () -> Selenide.open("http://127.0.0.1:3000/main"));
     }
 
+    @ValueSource(strings = {
+            "testdata/dima.json"
+    })
     @GenerateCategory(
             username = "Nick",
             category = "Relocate"
@@ -46,20 +39,14 @@ public class SpendsWebTest extends BaseWebTest {
         amount = 52000.00,
         category = "Relocate"
     )
+    //TODO: Доработать parameterResolver
     @Test
-    void spendShouldBeDeletedByActionInTable(SpendJson spend) {
-        $(".spendings-table tbody").$$("tr")
-            .find(text(spend.getDescription()))
-            .$$("td").first()
-            .scrollTo()
-            .click();
-
-        $$(".button_type_small").find(text("Delete selected"))
-            .click();
-
-        $(".spendings-table tbody")
-            .$$("tr")
-            .shouldHave(CollectionCondition.size(0));
-        throw new IllegalStateException();
+    void spendShouldBeDeletedByActionInTable(@ClassPathUser UserJson user, SpendJson spend) {
+        loginPage
+                .login(user);
+        mainPage
+                .findFirstRowInSpendTableAndSelect(spend)
+                .tapOnDeleteSelected()
+                .spendingTableIsEmpty();
     }
 }

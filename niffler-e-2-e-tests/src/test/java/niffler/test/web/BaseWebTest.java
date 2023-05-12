@@ -2,18 +2,18 @@ package niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import niffler.test.BaseTest;
+import niffler.jupiter.annotation.WebTest;
 import org.junit.jupiter.api.AfterAll;
 
-public class BaseWebTest extends BaseTest {
+@WebTest
+public abstract class BaseWebTest {
+  static {
+    Configuration.browserSize = "1920x1080";
+    Configuration.browser = "edge";
+  }
 
-    static {
-        Configuration.browserSize = "1920x1080";
-        Configuration.baseUrl = "http://127.0.0.1:3000";
-    }
-
-    @AfterAll
-    static void afterAll() {
-        Selenide.closeWebDriver();
-    }
+  @AfterAll
+  public static void afterAll() {
+    Selenide.closeWebDriver();
+  }
 }

@@ -70,5 +70,5 @@ spring:
 niffler-front:
   base-uri: 'http://niffler-frontend'
 niffler-auth:
-  base-uri: 'http://niffler-auth:9001'
+  base-uri: 'http://niffler-auth:9000'
 ---

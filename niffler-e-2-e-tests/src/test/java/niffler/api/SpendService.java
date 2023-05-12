@@ -19,5 +19,4 @@ public interface SpendService {
     @POST("/category")
     Call<CategoryJson> addCategory (@Body CategoryJson category);
 
-
 }
