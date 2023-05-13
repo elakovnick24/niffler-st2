@@ -1,112 +1,134 @@
 package niffler.jupiter.extension;
 
 import io.qameta.allure.AllureId;
-import java.lang.reflect.Parameter;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import niffler.jupiter.annotation.User;
 import niffler.jupiter.annotation.User.UserType;
 import niffler.model.UserJson;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
+
+import java.lang.reflect.Parameter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static niffler.jupiter.annotation.User.UserType.*;
 
 public class UsersQueueExtension implements
-    BeforeEachCallback,
-    AfterTestExecutionCallback,
-    ParameterResolver {
+        BeforeEachCallback,
+        AfterTestExecutionCallback,
+        ParameterResolver {
 
-  public static Namespace USER_EXTENSION_NAMESPACE = Namespace.create(UsersQueueExtension.class);
+    // Определяется константа USER_EXTENSION_NAMESPACE, которая представляет Namespace для хранилища расширения.
+    public static Namespace USER_EXTENSION_NAMESPACE = Namespace
+            .create(UsersQueueExtension.class);
 
-  private static Queue<UserJson> USERS_WITH_FRIENDS_QUEUE = new ConcurrentLinkedQueue<>();
-  private static Queue<UserJson> USERS_INVITATION_SENT_QUEUE = new ConcurrentLinkedQueue<>();
-  private static Queue<UserJson> USERS_INVITATION_RECEIVED_QUEUE = new ConcurrentLinkedQueue<>();
+    // Создается и инициализируется Map USERS_QUEUES, содержащая Queue объектов типа UserJson для разных значений UserType.
+    private final static Map<UserType, Queue<UserJson>> USERS_QUEUES = new ConcurrentHashMap<>();
 
-  static {
-    USERS_WITH_FRIENDS_QUEUE.addAll(
-        List.of(userJson("dima", "12345"), userJson("kyle", "12345"))
-    );
-    USERS_INVITATION_SENT_QUEUE.addAll(
-        List.of(userJson("emma", "12345"), userJson("emily", "12345"))
-    );
-    USERS_INVITATION_RECEIVED_QUEUE.addAll(
-        List.of(userJson("anna", "12345"), userJson("bill", "12345"))
-    );
-  }
+    static {
+        USERS_QUEUES.put(WITH_FRIENDS, new LinkedList<>(List.of(
+                userJson("nick", "12345"),
+                userJson("kyle", "12345"))
+        ));
 
-  @Override
-  public void beforeEach(ExtensionContext context) throws Exception {
-    final String testId = getTestId(context);
-    Parameter[] testParameters = context.getRequiredTestMethod().getParameters();
-    for (Parameter parameter : testParameters) {
-      User desiredUser = parameter.getAnnotation(User.class);
-      if (desiredUser != null) {
-        UserType userType = desiredUser.userType();
+        USERS_QUEUES.put(INVITATION_SENT, new LinkedList<>(
+                List.of(userJson("emma", "12345"),
+                        userJson("emily", "12345"))
+        ));
 
-        UserJson user = null;
-        while (user == null) {
-          switch (userType) {
-            case WITH_FRIENDS -> user = USERS_WITH_FRIENDS_QUEUE.poll();
-            case INVITATION_SENT -> user = USERS_INVITATION_SENT_QUEUE.poll();
-            case INVITATION_RECEIVED -> user = USERS_INVITATION_RECEIVED_QUEUE.poll();
-          }
+        USERS_QUEUES.put(INVITATION_RECEIVED, new LinkedList<>(
+                List.of(userJson("anna", "12345"),
+                        userJson("bill", "12345"))
+        ));
+    }
+
+    @Override
+    public void beforeEach(ExtensionContext context) throws Exception {
+        // Получение testId с помощью метода getTestId
+        final String testId = getTestId(context);
+        // Инициализация Map users
+        Map<UserType, Map<String, UserJson>> users = new HashMap();
+        // Фильтрует и получает параметры метода теста getParameters(), помеченные аннотацией @User.
+        List<Parameter> testParameters = Arrays.stream(
+                        context.getRequiredTestMethod()
+                                .getParameters())
+                //Параметр содержит аннотацию User? Если, да оставь в стриме
+                .filter(p -> p.isAnnotationPresent(User.class))
+                .toList();
+        // В цикле проихводится проход по каждому параметру из списка testParameters
+        for (Parameter parameter : testParameters) {
+            // Проверка на null, не требуется тк выше отфильтровали в стриме
+            // Получение UserType из аннотации User.class
+            UserType userType = parameter.getAnnotation(User.class).userType();
+            UserJson user = null;
+            while (user == null) {
+                // Извлечение объекта UserJson из соответствующей очереди в USERS_QUEUES
+                user = USERS_QUEUES.get(userType).poll();
+            }
+            // Сохранение извлеченного объекта UserJson в Map users с использованием getName() в качестве key.
+            users.putIfAbsent(userType, new HashMap<>());
+            users.get(userType)
+                    .put(parameter.getName(), user);
         }
-
-        context.getStore(USER_EXTENSION_NAMESPACE).put(testId, Map.of(userType, user));
-      }
+        // Сохранение Map users в store, с использованием testId в качестве key.
+        context.getStore(USER_EXTENSION_NAMESPACE)
+                .put(testId, users);
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public void afterTestExecution(ExtensionContext context) throws Exception {
-    final String testId = getTestId(context);
-    Map<UserType, UserJson> user = (Map<UserType, UserJson>) context.getStore(USER_EXTENSION_NAMESPACE)
-        .get(testId);
-
-    UserType userType = user.keySet().iterator().next();
-    switch (userType) {
-      case WITH_FRIENDS -> USERS_WITH_FRIENDS_QUEUE.add(user.get(userType));
-      case INVITATION_SENT -> USERS_INVITATION_SENT_QUEUE.add(user.get(userType));
-      case INVITATION_RECEIVED -> USERS_INVITATION_RECEIVED_QUEUE.add(user.get(userType));
+    @SuppressWarnings("unchecked")
+    @Override
+    public void afterTestExecution(ExtensionContext context) throws Exception {
+        // Получение testId с помощью метода getTestId
+        final String testId = getTestId(context);
+        // Извлечение Map users из store, используя testId
+        Map<UserType, Map<String, UserJson>> users =
+                context.getStore(USER_EXTENSION_NAMESPACE)
+                        .get(testId, Map.class);
+        // Добавляет все объекты UserJson из Map users обратно в соответствующую очередь в USERS_QUEUES
+        for (Map.Entry<UserType, Map<String, UserJson>> entryUsers : users.entrySet()) {
+            USERS_QUEUES.get(entryUsers.getKey()).addAll(
+                    entryUsers.getValue().values());
+        }
     }
-  }
 
-  @Override
-  public boolean supportsParameter(ParameterContext parameterContext,
-      ExtensionContext extensionContext) throws ParameterResolutionException {
-    return parameterContext.getParameter().isAnnotationPresent(User.class) &&
-        parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
-  }
+    @Override
+    public boolean supportsParameter(ParameterContext parameterContext,
+                                     ExtensionContext context) throws ParameterResolutionException {
+        return parameterContext.getParameter().isAnnotationPresent(User.class) &&
+                parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
+    }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  public UserJson resolveParameter(ParameterContext parameterContext,
-      ExtensionContext extensionContext) throws ParameterResolutionException {
-    final String testId = getTestId(extensionContext);
-    Map<UserType, UserJson> user = (Map<UserType, UserJson>) extensionContext.getStore(USER_EXTENSION_NAMESPACE)
-        .get(testId);
+    // Метод resolveParameter разрешает значение для параметра, помеченного аннотацией @User
+    @SuppressWarnings("unchecked")
+    @Override
+    public UserJson resolveParameter(ParameterContext parameterContext,
+                                     ExtensionContext context) throws ParameterResolutionException {
+        // Извлечение testId, parameter name
+        final String testId = getTestId(context);
+        String name = parameterContext.getParameter().getName();
+        // Извлечение Map users из хранилища расширения по testId
+        Map<UserType, Map<String, UserJson>> users = context
+                .getStore(USER_EXTENSION_NAMESPACE)
+                .get(testId, Map.class);
+        return users
+                .get(parameterContext
+                        .getParameter()
+                        .getAnnotation(User.class)
+                        .userType())
+                .get(name);
+    }
 
-    return user.values().iterator().next();
-  }
+    // Метод getTestId извлекает идентификатор теста из аннотации AllureId на методе тестирования
+    private String getTestId(ExtensionContext context) {
+        return Objects
+                .requireNonNull(context.getRequiredTestMethod().getAnnotation(AllureId.class))
+                .value();
+    }
 
-  private String getTestId(ExtensionContext context) {
-    return Objects
-        .requireNonNull(context.getRequiredTestMethod().getAnnotation(AllureId.class))
-        .value();
-  }
-
-  private static UserJson userJson(String userName, String password) {
-    UserJson user = new UserJson();
-    user.setUsername(userName);
-    user.setPassword(password);
-    return user;
-  }
+    private static UserJson userJson(String userName, String password) {
+        UserJson user = new UserJson();
+        user.setUsername(userName);
+        user.setPassword(password);
+        return user;
+    }
 }

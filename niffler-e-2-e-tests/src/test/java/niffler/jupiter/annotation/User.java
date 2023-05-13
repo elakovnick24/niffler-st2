@@ -12,7 +12,7 @@ public @interface User {
   UserType userType();
 
   enum UserType {
-    WITH_FRIENDS, // dima, barsik
+    WITH_FRIENDS, // nick, kyle
     INVITATION_SENT, // emma, emily
     INVITATION_RECEIVED, // anna, bill
   }

@@ -30,7 +30,7 @@ public class MainPage {
     public MainPage spendingTableIsEmpty() {
         bodyTable
                 .shouldHave(CollectionCondition.size(0));
-        throw new IllegalStateException();
+        return this;
     }
 }
 

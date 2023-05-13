@@ -1,6 +1,9 @@
 package niffler.test.page;
 
 import com.codeborne.selenide.SelenideElement;
+import niffler.jupiter.annotation.User;
+import niffler.model.CategoryJson;
+import niffler.model.SpendJson;
 import niffler.model.UserJson;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -15,6 +18,27 @@ public class LoginPage {
         tapLoginForm.click();
         username.setValue(user.getUsername());
         password.setValue(user.getPassword());
+        loginButton.click();
+    }
+
+    public void login(CategoryJson name, String setPassword) {
+        tapLoginForm.click();
+        username.setValue(String.valueOf(name));
+        password.setValue(setPassword);
+        loginButton.click();
+    }
+
+    public void login(SpendJson name, String setPassword) {
+        tapLoginForm.click();
+        username.setValue(String.valueOf(name));
+        password.setValue(setPassword);
+        loginButton.click();
+    }
+
+    public void login(String name, String setPassword) {
+        tapLoginForm.click();
+        username.setValue(String.valueOf(name));
+        password.setValue(setPassword);
         loginButton.click();
     }
 }

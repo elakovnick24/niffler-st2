@@ -5,17 +5,14 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
 import niffler.jupiter.annotation.ClassPathUser;
 import niffler.model.UserJson;
-import niffler.test.page.LoginPage;
-import niffler.test.page.component.HeaderNavigationComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
+
 public class LoginWebTest extends BaseWebTest {
-    LoginPage loginPage = new LoginPage();
-    HeaderNavigationComponent headerNavigationComponent = new HeaderNavigationComponent();
 
     @BeforeEach
     void doLogin() {
@@ -29,7 +26,7 @@ public class LoginWebTest extends BaseWebTest {
     @ParameterizedTest
     void loginTest(@ClassPathUser UserJson user) throws IOException {
         loginPage.login(user);
-        headerNavigationComponent
+        headerNavigation
                 .openFriends()
                 .checkTextInHeader("Niffler. The coin keeper.");
     }
