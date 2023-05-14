@@ -17,15 +17,16 @@ public abstract class BaseWebTest {
     Configuration.browser = "edge";
   }
 
-  LoginPage loginPage = new LoginPage();
+  public LoginPage loginPage = new LoginPage();
 
-  MainPage mainPage = new MainPage();
-  FriendsPage friendsPage = new FriendsPage();
-  ProfilePage profilePage = new ProfilePage();
-  HeaderNavigationComponent headerNavigation = new HeaderNavigationComponent();
+  public MainPage mainPage = new MainPage();
+  public FriendsPage friendsPage = new FriendsPage();
+  public ProfilePage profilePage = new ProfilePage();
+  public HeaderNavigationComponent headerNavigation = new HeaderNavigationComponent();
 
   @AfterAll
   public static void afterAll() {
     Selenide.closeWebDriver();
   }
+
 }
