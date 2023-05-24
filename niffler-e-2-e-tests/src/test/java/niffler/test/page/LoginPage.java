@@ -1,7 +1,6 @@
 package niffler.test.page;
 
 import com.codeborne.selenide.SelenideElement;
-import niffler.jupiter.annotation.User;
 import niffler.model.CategoryJson;
 import niffler.model.SpendJson;
 import niffler.model.UserJson;

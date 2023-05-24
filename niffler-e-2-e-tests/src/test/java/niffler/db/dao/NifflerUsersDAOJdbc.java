@@ -1,6 +1,5 @@
 package niffler.db.dao;
 
-import niffler.db.DataSourceProvider;
 import niffler.db.ServiceDB;
 import niffler.db.entity.UserEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
-import static niffler.db.DataSourceProvider.*;
+import static niffler.db.DataSourceProvider.INSTANCE;
 import static org.springframework.security.crypto.factory.PasswordEncoderFactories.createDelegatingPasswordEncoder;
 
 public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
