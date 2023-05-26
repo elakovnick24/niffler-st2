@@ -10,55 +10,55 @@ public class TestLifecycleExtension implements BeforeEachCallback,
         BeforeAllCallback {
 
     @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
-        System.out.print("-----------> Before All Context ----------->  ");
+    public void beforeAll(ExtensionContext context) {
+        System.out.println("-----------> Before All Context ----------->  ");
         try {
             context.getRequiredTestMethod();
-            System.out.print("----------->  getRequiredTestMethod() -----------> ");
+            System.out.println("----------->  getRequiredTestMethod() -----------> ");
         } catch (Exception e){};
         try {
             context.getRequiredTestClass();
-            System.out.print("----------->  getRequiredTestClass() ----------->  ");
+            System.out.println("----------->  getRequiredTestClass() ----------->  ");
         } catch (Exception e){};
         try {
             context.getRequiredTestInstance();
-            System.out.print("----------->  getRequiredTestInstance() -----------> ");
+            System.out.println("----------->  getRequiredTestInstance() -----------> ");
         } catch (Exception e){}
         System.out.println();
     }
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        System.out.print("-----------> Before Each -----------> ");
+        System.out.println("-----------> Before Each Context -----------> ");
         try {
             context.getRequiredTestMethod();
-            System.out.print("----------->  getRequiredTestMethod() -----------> ");
+            System.out.println("----------->  getRequiredTestMethod() -----------> ");
         } catch (Exception e){};
         try {
             context.getRequiredTestClass();
-            System.out.print("----------->  getRequiredTestClass() -----------> ");
+            System.out.println("----------->  getRequiredTestClass() -----------> ");
         } catch (Exception e){};
         try {
             context.getRequiredTestInstance();
-            System.out.print("----------->  getRequiredTestInstance() -----------> ");
+            System.out.println("----------->  getRequiredTestInstance() -----------> ");
         } catch (Exception e){}
         System.out.println();
     }
 
     @Override
-    public void beforeTestExecution(ExtensionContext context) throws Exception {
-        System.out.print("----------->  Before Test Execution -----------> ");
+    public void beforeTestExecution(ExtensionContext context) {
+        System.out.println("----------->  Before Test Execution -----------> ");
         try {
             context.getRequiredTestMethod();
-            System.out.print("-----------> getRequiredTestMethod() -----------> ");
+            System.out.println("-----------> getRequiredTestMethod() -----------> ");
         } catch (Exception e){};
         try {
             context.getRequiredTestClass();
-            System.out.print("-----------> getRequiredTestClass() -----------> ");
+            System.out.println("-----------> getRequiredTestClass() -----------> ");
         } catch (Exception e){};
         try {
             context.getRequiredTestInstance();
-            System.out.print("-----------> getRequiredTestInstance() -----------> ");
+            System.out.println("-----------> getRequiredTestInstance() -----------> ");
         } catch (Exception e){}
         System.out.println();
     }

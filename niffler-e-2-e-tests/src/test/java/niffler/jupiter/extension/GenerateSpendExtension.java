@@ -52,13 +52,13 @@ public class GenerateSpendExtension implements ParameterResolver, BeforeEachCall
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext,
-        ExtensionContext extensionContext) throws ParameterResolutionException {
+                                     ExtensionContext extensionContext) throws ParameterResolutionException {
         return parameterContext.getParameter().getType().isAssignableFrom(SpendJson.class);
     }
 
     @Override
     public SpendJson resolveParameter(ParameterContext parameterContext,
-        ExtensionContext extensionContext) throws ParameterResolutionException {
+                                      ExtensionContext extensionContext) throws ParameterResolutionException {
         return extensionContext.getStore(NAMESPACE).get("spend", SpendJson.class);
     }
 }

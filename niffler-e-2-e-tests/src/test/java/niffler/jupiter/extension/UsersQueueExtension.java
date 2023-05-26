@@ -55,7 +55,7 @@ public class UsersQueueExtension implements
                 //Параметр содержит аннотацию User? Если, да оставь в стриме
                 .filter(p -> p.isAnnotationPresent(User.class))
                 .toList();
-        // В цикле проихводится проход по каждому параметру из списка testParameters
+        // В цикле производится проход по каждому параметру из списка testParameters
         for (Parameter parameter : testParameters) {
             // Проверка на null, не требуется тк выше отфильтровали в стриме
             // Получение UserType из аннотации User.class
@@ -75,6 +75,33 @@ public class UsersQueueExtension implements
                 .put(testId, users);
     }
 
+    @Override
+    public boolean supportsParameter(ParameterContext parameterContext,
+                                     ExtensionContext context) throws ParameterResolutionException {
+        return parameterContext.getParameter().isAnnotationPresent(User.class) &&
+                parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
+    }
+
+    // Метод resolveParameter разрешает значение для параметра, помеченного аннотацией @User
+    @SuppressWarnings("unchecked")
+    @Override
+    public UserJson resolveParameter(ParameterContext parameterContext,
+                                     ExtensionContext context) throws ParameterResolutionException {
+        // Извлечение testId, parameter name
+        final String testId = getTestId(context);
+        String name = parameterContext.getParameter().getName();
+        // Извлечение Map users из хранилища extension по testId
+        Map<UserType, Map<String, UserJson>> users = context
+                .getStore(USER_EXTENSION_NAMESPACE)
+                .get(testId, Map.class);
+        return users
+                .get(parameterContext
+                        .getParameter()
+                        .getAnnotation(User.class)
+                        .userType())
+                .get(name);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
@@ -91,34 +118,7 @@ public class UsersQueueExtension implements
         }
     }
 
-    @Override
-    public boolean supportsParameter(ParameterContext parameterContext,
-                                     ExtensionContext context) throws ParameterResolutionException {
-        return parameterContext.getParameter().isAnnotationPresent(User.class) &&
-                parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
-    }
-
-    // Метод resolveParameter разрешает значение для параметра, помеченного аннотацией @User
-    @SuppressWarnings("unchecked")
-    @Override
-    public UserJson resolveParameter(ParameterContext parameterContext,
-                                     ExtensionContext context) throws ParameterResolutionException {
-        // Извлечение testId, parameter name
-        final String testId = getTestId(context);
-        String name = parameterContext.getParameter().getName();
-        // Извлечение Map users из хранилища расширения по testId
-        Map<UserType, Map<String, UserJson>> users = context
-                .getStore(USER_EXTENSION_NAMESPACE)
-                .get(testId, Map.class);
-        return users
-                .get(parameterContext
-                        .getParameter()
-                        .getAnnotation(User.class)
-                        .userType())
-                .get(name);
-    }
-
-    // Метод getTestId извлекает идентификатор теста из аннотации AllureId на методе тестирования
+    // Утилитный метод getTestId извлекает идентификатор теста из аннотации AllureId на методе тестирования
     private String getTestId(ExtensionContext context) {
         return Objects
                 .requireNonNull(context.getRequiredTestMethod().getAnnotation(AllureId.class))

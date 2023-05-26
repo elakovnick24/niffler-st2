@@ -10,7 +10,7 @@ import niffler.test.page.ProfilePage;
 import niffler.test.page.component.HeaderNavigationComponent;
 import org.junit.jupiter.api.AfterAll;
 
-@WebTest
+
 public abstract class BaseWebTest {
   static {
     Configuration.browserSize = "1920x1080";

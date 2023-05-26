@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static niffler.config.Config.getConfig;
 
 public enum DataSourceProvider {
+
+    // Реализация Singleton через Enum
     INSTANCE;
 
     private final Map<ServiceDB, DataSource> dataSources = new ConcurrentHashMap<>();
