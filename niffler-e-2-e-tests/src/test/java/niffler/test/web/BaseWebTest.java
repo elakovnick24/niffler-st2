@@ -2,7 +2,6 @@ package niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import niffler.jupiter.annotation.WebTest;
 import niffler.test.page.FriendsPage;
 import niffler.test.page.LoginPage;
 import niffler.test.page.MainPage;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.AfterAll;
 public abstract class BaseWebTest {
   static {
     Configuration.browserSize = "1920x1080";
-    Configuration.browser = "edge";
+    Configuration.browser = "firefox";
   }
 
   public LoginPage loginPage = new LoginPage();

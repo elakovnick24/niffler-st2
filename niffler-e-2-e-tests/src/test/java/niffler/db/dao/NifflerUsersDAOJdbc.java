@@ -1,6 +1,7 @@
 package niffler.db.dao;
 
 import niffler.db.ServiceDB;
+import niffler.db.entity.AuthorityEntity;
 import niffler.db.entity.UserEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -25,7 +26,9 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
 
             try (PreparedStatement st = conn.prepareStatement("INSERT INTO users "
                     + "(username, password, enabled, account_non_expired, account_non_locked, credentials_non_expired) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)")) {
+                    + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement insertAuthoritySt = conn.prepareStatement(
+                    "INSEERT INTO authorities (user_id, authority) VALUES (?, ?)")) {
                 st.setString(1, user.getUsername());
                 st.setString(2, encoder.encode(user.getPassword()));
                 st.setBoolean(3, user.getEnabled());
@@ -33,27 +36,25 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
                 st.setBoolean(5, user.getAccountNonLocked());
                 st.setBoolean(6, user.getCredentialsNonExpired());
                 executeUpdate = st.executeUpdate();
-                // TODO: Реализовать коммит в одной транзакции
-                conn.commit();
-                String insertAuthoritiesSql =
-                        "INSERT INTO authorities (user_id, authority) VALUES ('%s', '%s')";
 
-                final String finalUserId = getUserId(user.getUsername());
+                final UUID finalUserId;
 
-                List<String> sqls = user.getAuthorities()
-                        .stream()
-                        .map(ae -> ae.getAuthority().name())
-                        .map(a -> String.format(insertAuthoritiesSql, finalUserId, a))
-                        .toList();
-
-                for (String sql : sqls) {
-                    try (Statement st2 = conn.createStatement()) {
-                        st2.executeUpdate(sql);
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        finalUserId = UUID.fromString(generatedKeys.getString(1));
+                    } else {
+                        throw new SQLException("Creating user failed, no ID present");
                     }
                 }
-            } catch (SQLException e) {
+
+                for (AuthorityEntity authority : user.getAuthorities()) {
+                    insertAuthoritySt.setObject(1, finalUserId);
+                    insertAuthoritySt.setObject(2, authority.getAuthority().name());
+                    insertAuthoritySt.addBatch();
+                    insertAuthoritySt.clearParameters();
+                }
+                insertAuthoritySt.executeBatch();
+        } catch (SQLException e) {
                 // Эту обработку взял из доки as is
                 if (conn != null) {
                     try {
@@ -71,7 +72,6 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return executeUpdate;
     }
 
