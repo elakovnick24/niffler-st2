@@ -20,28 +20,31 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
 
     @Override
     public int createUser(UserEntity user) {
-        int executeUpdate = 0;
+        int executeUpdate;
+
         try (Connection conn = ds.getConnection()) {
+
             conn.setAutoCommit(false);
 
-            try (PreparedStatement st = conn.prepareStatement("INSERT INTO users "
+            try (PreparedStatement insertUserSt = conn.prepareStatement("INSERT INTO users "
                     + "(username, password, enabled, account_non_expired, account_non_locked, credentials_non_expired) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            PreparedStatement insertAuthoritySt = conn.prepareStatement(
-                    "INSEERT INTO authorities (user_id, authority) VALUES (?, ?)")) {
-                st.setString(1, user.getUsername());
-                st.setString(2, encoder.encode(user.getPassword()));
-                st.setBoolean(3, user.getEnabled());
-                st.setBoolean(4, user.getAccountNonExpired());
-                st.setBoolean(5, user.getAccountNonLocked());
-                st.setBoolean(6, user.getCredentialsNonExpired());
-                executeUpdate = st.executeUpdate();
+                    + " VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement insertAuthoritySt = conn.prepareStatement(
+                         "INSERT INTO authorities (user_id, authority) VALUES (?, ?)")) {
+                insertUserSt.setString(1, user.getUsername());
+                insertUserSt.setString(2, encoder.encode(user.getPassword()));
+                insertUserSt.setBoolean(3, user.getEnabled());
+                insertUserSt.setBoolean(4, user.getAccountNonExpired());
+                insertUserSt.setBoolean(5, user.getAccountNonLocked());
+                insertUserSt.setBoolean(6, user.getCredentialsNonExpired());
+                executeUpdate = insertUserSt.executeUpdate();
 
                 final UUID finalUserId;
 
-                try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                try (ResultSet generatedKeys = insertUserSt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         finalUserId = UUID.fromString(generatedKeys.getString(1));
+                        user.setId(finalUserId);
                     } else {
                         throw new SQLException("Creating user failed, no ID present");
                     }
@@ -49,26 +52,20 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
 
                 for (AuthorityEntity authority : user.getAuthorities()) {
                     insertAuthoritySt.setObject(1, finalUserId);
-                    insertAuthoritySt.setObject(2, authority.getAuthority().name());
+                    insertAuthoritySt.setString(2, authority.getAuthority().name());
                     insertAuthoritySt.addBatch();
                     insertAuthoritySt.clearParameters();
                 }
                 insertAuthoritySt.executeBatch();
-        } catch (SQLException e) {
-                // Эту обработку взял из доки as is
-                if (conn != null) {
-                    try {
-                        System.err.print("Transaction is being rolled back");
-                        conn.rollback();
-                    } catch (SQLException excep) {
-                        throw new RuntimeException(excep);
-                    } finally {
-                        conn.setAutoCommit(true);
-                    }
-                }
+            } catch (SQLException e) {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                throw new RuntimeException(e);
             }
+
             conn.commit();
             conn.setAutoCommit(true);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
