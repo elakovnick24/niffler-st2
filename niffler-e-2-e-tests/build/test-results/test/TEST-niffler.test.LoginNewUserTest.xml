@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="niffler.test.LoginNewUserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-06-19T19:30:13" hostname="Nikitas-MacBook-Pro.local" time="4.493">
+  <properties/>
+  <testcase name="loginTest(UserEntity)" classname="niffler.test.LoginNewUserTest" time="4.493"/>
+  <system-out><![CDATA[Total deleted from authorities: 2 rows
+Total deleted from users: 1 rows
+]]></system-out>
+  <system-err><![CDATA[1687203015115	geckodriver	INFO	Listening on 127.0.0.1:3081
+1687203015281	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/App ... /[::1]:26311/" "-foreground" "-no-remote" "-profile" "/var/folders/90/xlf6hcpj0vxfjh4w74x4msz00000gn/T/rust_mozprofileAVqfHl"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1687203015613	Marionette	INFO	Marionette enabled
+1687203015768	Marionette	INFO	Listening on port 54920
+console.error: "Warning: unrecognized command line flag -remote-allow-hosts\n"
+console.error: "Warning: unrecognized command line flag -remote-allow-origins\n"
+Read port: 54920
+WebDriver BiDi listening on ws://127.0.0.1:26311
+1687203015820	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+UNSUPPORTED (log once): POSSIBLE ISSUE: unit 1 GLD_TEXTURE_INDEX_2D is unloadable and bound to sampler type (Float) - using zero texture because texture unloadable
+DevTools listening on ws://127.0.0.1:26311/devtools/browser/88ebbf69-129a-4c39-8055-2a65ed6c673f
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://127.0.0.1:9001."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://127.0.0.1:9001."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: http://127.0.0.1:3000."
+1687203018460	RemoteAgent	INFO	Perform WebSocket upgrade for incoming connection from 127.0.0.1:54978
+1687203018461	CDP	WARN	Invalid browser preferences for CDP. Set "fission.webContentIsolationStrategy"to 0 and "fission.bfcacheInParent" to false before Firefox starts.
+1687203018484	Marionette	INFO	Stopped listening on port 54920
+]]></system-err>
+</testsuite>

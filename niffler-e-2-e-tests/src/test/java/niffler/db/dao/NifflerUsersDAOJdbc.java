@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.List;
 import java.util.UUID;
 
 import static niffler.db.DataSourceProvider.INSTANCE;
@@ -16,7 +15,7 @@ import static org.springframework.security.crypto.factory.PasswordEncoderFactori
 public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
 
     private static final DataSource ds = INSTANCE.getDataSource(ServiceDB.NIFFLER_AUTH);
-    private static final PasswordEncoder encoder = createDelegatingPasswordEncoder();
+
 
     @Override
     public int createUser(UserEntity user) {
@@ -119,7 +118,7 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
     }
 
     @Override
-    public void deleteUser(UserEntity user) throws SQLException {
+    public int removeUser(UserEntity user) throws SQLException {
         UUID uuid = user.getId();
         int rowsDeleted1 = 0;
         int rowsDeleted2 = 0;
@@ -152,6 +151,7 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return rowsDeleted1;
     }
 
     @Override

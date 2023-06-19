@@ -69,7 +69,7 @@ public class CreateUserDBExtension implements
         final String testId = getTestId(context);
         UserEntity userEntity = context.getStore(NAMESPACE)
                 .get(testId, UserEntity.class);
-        usersDAO.deleteUser(userEntity);
+        usersDAO.removeUser(userEntity);
     }
 
     private String getTestId(ExtensionContext context) {
