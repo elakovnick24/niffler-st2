@@ -16,7 +16,7 @@ public class NifflerUsersDAOSpringJdbc implements NifflerUsersDAO {
     private final TransactionTemplate transactionTemplate;
     private final JdbcTemplate jdbcTemplate;
 
-    public NifflerUsersDAOSpringJdbc(TransactionTemplate transactionTemplate) {
+    public NifflerUsersDAOSpringJdbc() {
         DataSourceTransactionManager transactionManager = new JdbcTransactionManager(
                 DataSourceProvider.INSTANCE.getDataSource(ServiceDB.NIFFLER_AUTH)
         );
