@@ -72,11 +72,11 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
     }
 
     @Override
-    public UserEntity getUser(UUID uuid) {
+    public UserEntity getUser(UserEntity userEntity) {
         UserEntity user = null;
         try (Connection conn = ds.getConnection();
              PreparedStatement st = conn.prepareStatement("SELECT FROM users WHERE id = ?")) {
-            st.setObject(1, uuid);
+            st.setObject(1, userEntity.getId());
             ResultSet resultSet = st.executeQuery();
             if (resultSet.next()) {
                 user.setId(UUID.fromString(resultSet.getString(1)));
@@ -88,7 +88,7 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
                 user.setCredentialsNonExpired(resultSet.getBoolean(7));
                 return user;
             } else {
-                throw new IllegalArgumentException("Can't find user by given UUID: " + uuid);
+                throw new IllegalArgumentException("Can't find user by given UUID: " + userEntity.getId());
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

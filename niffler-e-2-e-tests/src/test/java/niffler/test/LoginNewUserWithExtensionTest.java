@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static niffler.jupiter.annotation.GenerateUserWith.ClientDB.JDBC;
+import static niffler.jupiter.annotation.GenerateUserWith.ClientDB.SPRING_JDBC;
 
 @ExtendWith(CreateUserDBExtension.class)
 public class LoginNewUserWithExtensionTest extends BaseWebTest {
@@ -18,7 +19,7 @@ public class LoginNewUserWithExtensionTest extends BaseWebTest {
     @AllureId("105")
     @Test
     void loginTest(@GenerateUserWith(
-            clientDB = JDBC,
+            clientDB = SPRING_JDBC,
             deleteUserAfterEach = false
     ) UserEntity user) {
         Allure.step("open page", () -> Selenide.open("http://127.0.0.1:3000/main"));

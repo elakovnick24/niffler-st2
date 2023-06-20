@@ -38,7 +38,7 @@ public class NifflerUsersDAOHibernate extends JpaTransactionManager implements N
        return 0;
     }
     @Override
-    public UserEntity getUser(UUID uuid) {
+    public UserEntity getUser(UserEntity userEntity) {
         return null;
     }
 

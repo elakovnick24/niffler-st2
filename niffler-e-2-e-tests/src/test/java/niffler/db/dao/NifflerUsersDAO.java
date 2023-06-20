@@ -12,7 +12,7 @@ public interface NifflerUsersDAO {
     PasswordEncoder encoder = createDelegatingPasswordEncoder();
     int createUser(UserEntity user);
 
-    UserEntity getUser(UUID uuid);
+    UserEntity getUser(UserEntity userEntity);
 
 
     int updateUser(UserEntity user);
