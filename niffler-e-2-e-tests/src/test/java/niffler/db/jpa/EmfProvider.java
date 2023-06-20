@@ -14,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static niffler.config.Config.getConfig;
 
 public enum EmfProvider {
-
-    // Реализация Singleton через Enum
     INSTANCE;
 
     private final Map<ServiceDB, EntityManagerFactory> emfStore = new ConcurrentHashMap<>();
@@ -25,10 +23,9 @@ public enum EmfProvider {
             Map<String, Object> properties = new HashMap<>();
             properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
             properties.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-//            properties.put("hibernate.connection.driver_class", "com.p6spy.engine.spy.P6SpyDriver");
             properties.put("hibernate.connection.username", "postgres");
             properties.put("hibernate.connection.password", "secret");
-            properties.put("hibernate.connection.url", service.getJdbcurl());
+            properties.put("hibernate.connection.url", service.getJdbcUrl());
 
             return new ThreadLocalEmf(Persistence.createEntityManagerFactory(
                     "niffler-persistence-unit-name",

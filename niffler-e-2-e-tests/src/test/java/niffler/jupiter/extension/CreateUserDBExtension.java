@@ -56,6 +56,7 @@ public class CreateUserDBExtension implements
                     a -> {
                         AuthorityEntity authorityEntity = new AuthorityEntity();
                         authorityEntity.setAuthority(a);
+                        authorityEntity.setUser(entity);
                         return authorityEntity;
                     }
             ).toList());

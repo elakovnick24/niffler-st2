@@ -9,34 +9,34 @@ import java.util.Map;
 public class ThreadLocalEmf implements EntityManagerFactory {
 
     private final EntityManagerFactory delegate;
-    private final ThreadLocal<EntityManager> threadLocalEmf;
+    private final ThreadLocal<EntityManager> threadLocalEm;
 
     public ThreadLocalEmf(EntityManagerFactory delegate) {
         this.delegate = delegate;
-        this.threadLocalEmf = ThreadLocal.withInitial(delegate::createEntityManager);
+        threadLocalEm = ThreadLocal.withInitial(delegate::createEntityManager);
     }
 
     @Override
     public EntityManager createEntityManager() {
-        return null;
+        return threadLocalEm.get();
     }
 
     @Override
     public EntityManager createEntityManager(Map map) {
-        threadLocalEmf.set(delegate.createEntityManager(map));
-        return threadLocalEmf.get();
+        threadLocalEm.set(delegate.createEntityManager(map));
+        return threadLocalEm.get();
     }
 
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType) {
-        threadLocalEmf.set(delegate.createEntityManager(synchronizationType));
-        return threadLocalEmf.get();
+        threadLocalEm.set(delegate.createEntityManager(synchronizationType));
+        return threadLocalEm.get();
     }
 
     @Override
     public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
-        threadLocalEmf.set(delegate.createEntityManager(synchronizationType, map));
-        return threadLocalEmf.get();
+        threadLocalEm.set(delegate.createEntityManager(synchronizationType, map));
+        return threadLocalEm.get();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ThreadLocalEmf implements EntityManagerFactory {
 
     @Override
     public <T> T unwrap(Class<T> cls) {
-        return null;
+        return delegate.unwrap(cls);
     }
 
     @Override

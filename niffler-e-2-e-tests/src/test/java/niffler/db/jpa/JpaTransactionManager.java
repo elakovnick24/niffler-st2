@@ -19,11 +19,11 @@ public abstract class JpaTransactionManager {
     }
 
     protected void remove(Object entity) {
-        transaction(em -> em.persist(entity));
+        transaction(em -> em.remove(entity));
     }
 
     protected void merge(Object entity) {
-        transaction(em -> em.persist(entity));
+        transaction(em -> em.merge(entity));
     }
 
     protected void transaction(Consumer<EntityManager> consumer) {

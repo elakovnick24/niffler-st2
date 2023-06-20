@@ -8,24 +8,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static niffler.config.Config.getConfig;
 
-public enum DataSourceProvider {
 
-    // Реализация Singleton через Enum
+public enum DataSourceProvider {
     INSTANCE;
 
     private final Map<ServiceDB, DataSource> dataSources = new ConcurrentHashMap<>();
 
     public DataSource getDataSource(ServiceDB service) {
         return dataSources.computeIfAbsent(service, serviceDB -> {
-            String jdbcurl = serviceDB.getJdbcurl();
-            String loginDB = getConfig().getDBLogin();
-            String passwordDB = getConfig().getDBPassword();
             PGSimpleDataSource sds = new PGSimpleDataSource();
-
-            sds.setURL(jdbcurl);
-            sds.setUser(loginDB);
-            sds.setPassword(passwordDB);
+            sds.setURL(serviceDB.getJdbcUrl());
+            sds.setUser(getConfig().getDBLogin());
+            sds.setPassword(getConfig().getDBPassword());
             return sds;
         });
     }
+
 }

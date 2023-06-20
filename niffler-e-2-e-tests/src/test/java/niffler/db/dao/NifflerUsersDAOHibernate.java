@@ -35,15 +35,19 @@ public class NifflerUsersDAOHibernate extends JpaTransactionManager implements N
     @Override
     public int removeUser(UserEntity user) throws SQLException {
         remove(user);
-       return 0;
+        return 0;
     }
+
     @Override
     public UserEntity getUser(UserEntity userEntity) {
-        return null;
+        return em.createQuery("select u from UserEntity u where id=:id", UserEntity.class)
+                .setParameter("id", userEntity.getId())
+                .getSingleResult();
     }
 
     @Override
     public int updateUser(UserEntity user) {
+        merge(user);
         return 0;
     }
 
