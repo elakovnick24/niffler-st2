@@ -20,14 +20,6 @@ public class GenerateSpendExtension implements ParameterResolver, BeforeEachCall
     public static ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace
         .create(GenerateSpendExtension.class);
 
-    private static final OkHttpClient httpClient = new OkHttpClient.Builder()
-        .build();
-
-    private static final Retrofit retrofit = new Retrofit.Builder()
-        .client(httpClient)
-        .baseUrl("http://127.0.0.1:8093")
-        .addConverterFactory(JacksonConverterFactory.create())
-        .build();
     private final SpendRestClient spendRestClient = new SpendRestClient();
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {

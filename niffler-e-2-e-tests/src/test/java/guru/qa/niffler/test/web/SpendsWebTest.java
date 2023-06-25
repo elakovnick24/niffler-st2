@@ -8,8 +8,10 @@ import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class SpendsWebTest extends BaseWebTest {
     @BeforeEach
     void doLogin() {

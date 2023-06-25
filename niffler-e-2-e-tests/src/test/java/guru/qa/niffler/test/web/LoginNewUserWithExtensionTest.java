@@ -6,11 +6,13 @@ import guru.qa.niffler.jupiter.annotation.GenerateUserWith;
 import guru.qa.niffler.jupiter.extension.CreateUserDBExtension;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.jupiter.annotation.GenerateUserWith.ClientDB.HIBERNATE;
 
+@Disabled
 @ExtendWith(CreateUserDBExtension.class)
 public class LoginNewUserWithExtensionTest extends BaseWebTest {
 

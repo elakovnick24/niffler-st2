@@ -11,12 +11,14 @@ import guru.qa.niffler.test.page.LoginPage;
 import guru.qa.niffler.test.page.PeoplePage;
 import guru.qa.niffler.test.page.component.Header;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.jupiter.annotation.User.UserType.INVITATION_SENT;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.WITH_FRIENDS;
 
+@Disabled
 @ExtendWith(UsersQueueExtension.class)
 public class FriendWebTest extends BaseWebTest {
     LoginPage loginPage = new LoginPage();

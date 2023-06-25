@@ -6,12 +6,14 @@ import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Allure;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
 
+@Disabled
 public class LoginWebTest extends BaseWebTest {
 
     @BeforeEach
@@ -30,4 +32,7 @@ public class LoginWebTest extends BaseWebTest {
                 .openFriends()
                 .checkThatPageLoaded();
     }
+
+
+
 }

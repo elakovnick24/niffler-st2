@@ -14,7 +14,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 
-public class UpdateUserDataTest extends BaseWebTest {
+public class UpdateUserDataTest {
 
     @ValueSource(strings = {
             "testdata/nick.json",
@@ -39,5 +39,4 @@ public class UpdateUserDataTest extends BaseWebTest {
                 .body();
 
     }
-
 }

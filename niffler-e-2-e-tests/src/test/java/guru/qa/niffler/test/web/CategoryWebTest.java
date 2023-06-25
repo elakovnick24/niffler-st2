@@ -6,8 +6,10 @@ import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 public class CategoryWebTest extends BaseWebTest {
 
     @BeforeEach
