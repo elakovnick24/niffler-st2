@@ -43,9 +43,8 @@ public class FriendWebTest extends BaseWebTest {
             @User(userType = INVITATION_SENT) UserJson user1,
             @User(userType = WITH_FRIENDS) UserJson user2) {
         Selenide.open("http://127.0.0.1:3000/main");
-        loginPage.login(user1);
+        loginPage.fillLoginForm(user1);
         headerNavigation.openPeople();
         peoplePage.findInvitationPending();
-
     }
 }

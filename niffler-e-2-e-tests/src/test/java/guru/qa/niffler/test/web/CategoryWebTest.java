@@ -15,7 +15,7 @@ public class CategoryWebTest extends BaseWebTest {
     @BeforeEach
     void openMainPage() {
         Allure.step("open page", () -> Selenide.open("http://127.0.0.1:3000/main"));
-        loginPage.login("nick", "12345");
+        loginPage.fillLoginForm("nick", "12345");
     }
 
     @GenerateCategory(

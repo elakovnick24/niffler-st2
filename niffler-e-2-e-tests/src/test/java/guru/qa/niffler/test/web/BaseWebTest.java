@@ -5,7 +5,7 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.test.page.*;
 import guru.qa.niffler.test.page.component.Header;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 
 @WebTest
 public abstract class BaseWebTest {
@@ -14,15 +14,18 @@ public abstract class BaseWebTest {
     Configuration.browser = "chrome";
   }
 
-  public LoginPage loginPage = new LoginPage();
+  protected LoginPage loginPage = new LoginPage();
 
-  public MainPage mainPage = new MainPage();
-  public FriendsPage friendsPage = new FriendsPage();
-  public ProfilePage profilePage = new ProfilePage();
-  public Header header = new Header();
+  protected MainPage mainPage = new MainPage();
+  protected FriendsPage friendsPage = new FriendsPage();
+  protected ProfilePage profilePage = new ProfilePage();
+  protected Header header = new Header();
+  protected RegistrationPage registrationPage = new RegistrationPage();
 
-  @AfterAll
-  public static void afterAll() {
+  protected StartPage startPage = new StartPage();
+
+  @AfterEach
+  public void afterEach() {
     Selenide.closeWebDriver();
   }
 

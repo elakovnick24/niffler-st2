@@ -10,9 +10,9 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class Header extends BaseComponent<Header> {
     private final SelenideElement header = $(".header");
-    private final SelenideElement headerTitle = $(".header__title");
+//    private final SelenideElement headerTitle = $(".header__title");
     private final SelenideElement mainPageBtn = $(".header__navigation-item img[src*='main']");
-    private final SelenideElement friendsPageBtn = $("a[href*='friends']");
+    private final SelenideElement friendsPageBtn = $("a.header__link[href*='friends']");
     private final SelenideElement peoplePageBtn = $(".header__navigation-item img[src*='globe']");
     private final SelenideElement profilePageBtn = $("a[href*='profile']");
     private final SelenideElement logOutBtn = $(".header__logout .button-icon_type_logout");
@@ -23,12 +23,12 @@ public class Header extends BaseComponent<Header> {
 
     @Override
     public Header checkThatComponentDisplayer() {
-        self.$((By) headerTitle).shouldHave(text("Niffler. The coin keeper."));
+        self.$(".header__title").shouldHave(text("Niffler. The coin keeper."));
         return this;
     }
 
     public MainPage openMain() {
-        peoplePageBtn.click();
+        mainPageBtn.click();
         return new MainPage();
     }
 
@@ -38,7 +38,7 @@ public class Header extends BaseComponent<Header> {
     }
 
     public PeoplePage openPeople() {
-        profilePageBtn.click();
+        peoplePageBtn.click();
         return new PeoplePage();
     }
 
@@ -47,14 +47,9 @@ public class Header extends BaseComponent<Header> {
         return new ProfilePage();
     }
 
-    public Header logout() {
+    public StartPage logout() {
         logOutBtn.click();
-        return this;
-    }
-
-    public Header checkTextInHeader(String expectedText) {
-        header.should(Condition.visible).should(text(expectedText));
-        return this;
+        return new StartPage();
     }
 
 }

@@ -22,7 +22,7 @@ public class LoginNewUserWithExtensionTest extends BaseWebTest {
             clientDB = HIBERNATE
     ) UserEntity user) {
         Allure.step("open page", () -> Selenide.open("http://127.0.0.1:3000/main"));
-        loginPage.login(user.getUsername(), user.getPassword());
+        loginPage.fillLoginForm(user.getUsername(), user.getPassword());
         header
                 .openFriends()
                 .checkThatPageLoaded();
