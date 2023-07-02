@@ -27,6 +27,7 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
             doLogin(apiLogin.username(), apiLogin.password());
         }
     }
+
     private void doLogin(String username, String password) {
         final SessionContext sessionContext = SessionContext.getInstance();
         final CookieContext cookieContext = CookieContext.getInstance();
@@ -34,6 +35,7 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
         final String codeChallenge = OauthUtils.generateCodeChallange(codeVerifier);
         sessionContext.setCodeVerifier(codeVerifier);
         sessionContext.setCodeChallenge(codeChallenge);
+
         authClient.authorizePreRequest();
         authClient.login(username, password);
         final String token = authClient.getToken();
@@ -44,8 +46,9 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
         Cookie jssesionIdCookie = new Cookie(JSESSIONID, cookieContext.getCookie(JSESSIONID));
         WebDriverRunner.getWebDriver().manage().addCookie(jssesionIdCookie);
     }
+
     @Override
-    public void afterTestExecution(ExtensionContext context) {
+    public void afterTestExecution(ExtensionContext context) throws Exception {
         SessionContext.getInstance().release();
         CookieContext.getInstance().release();
     }

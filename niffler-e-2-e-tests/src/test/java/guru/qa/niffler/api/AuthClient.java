@@ -70,5 +70,6 @@ public class AuthClient extends BaseRestClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
