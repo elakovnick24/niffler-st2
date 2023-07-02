@@ -22,11 +22,12 @@ public class CreateUserDBExtension implements
 
     public static ExtensionContext.Namespace USER_DB_NAMESPACE = ExtensionContext.Namespace
             .create(CreateUserDBExtension.class);
-    private Faker faker = new Faker();
-    private NifflerUsersDAO usersDAO;
+
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
+        Faker faker = new Faker();
+        NifflerUsersDAO usersDAO = null;
         final String testId = context.getRequiredTestClass() + context.getRequiredTestMethod().toString();
         List<UserEntity> userEntity = new ArrayList<>();
         List<Parameter> parameters = Arrays.stream(context.getRequiredTestMethod().getParameters())
@@ -63,7 +64,8 @@ public class CreateUserDBExtension implements
             userEntity.add(entity);
             usersDAO.createUser(entity);
         }
-        context.getStore(USER_DB_NAMESPACE).put(testId, userEntity);
+        context.getStore(USER_DB_NAMESPACE).put(testId + "user", userEntity);
+        context.getStore(USER_DB_NAMESPACE).put(testId + "dao", userEntity);
     }
 
     @Override
@@ -84,7 +86,8 @@ public class CreateUserDBExtension implements
     @Override
     public void afterEach(ExtensionContext context) throws SQLException {
         final String testId = context.getRequiredTestClass() + context.getRequiredTestMethod().toString();
-        List<UserEntity> userEntityList = context.getStore(USER_DB_NAMESPACE).get(testId, List.class);
+        List<UserEntity> userEntityList = context.getStore(USER_DB_NAMESPACE).get(testId + "user", List.class);
+        NifflerUsersDAO usersDAO = context.getStore(USER_DB_NAMESPACE).get(testId + "dao", NifflerUsersDAO.class);
         List<Parameter> parameters = Arrays.stream(context.getRequiredTestMethod().getParameters())
                 .filter(parameter -> parameter.isAnnotationPresent(GenerateUserWith.class))
                 .toList();

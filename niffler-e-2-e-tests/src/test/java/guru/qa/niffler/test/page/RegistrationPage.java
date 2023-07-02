@@ -10,16 +10,16 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class RegistrationPage extends BasePage<RegistrationPage> {
 
-    public static final String URL = Config.getConfig().getFrontUrl() + "register";
+    public static final String URL = Config.getConfig().getFrontUrl() + "/register";
     // not use static in this case
     private final SelenideElement header = $(".form__paragraph");
     //    private static final String headerSelector = ".form__header";
-//    private static final By byHeaderSelector  = new ByCssSelector(".form__header");
+    //    private static final By byHeaderSelector  = new ByCssSelector(".form__header");
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement passwordSubmitInput = $("#passwordSubmit");
     private final SelenideElement signUpBtn = $("button[type='submit']");
-    private final SelenideElement error =  $(".form__error");
+    private final SelenideElement error = $(".form__error");
     private final SelenideElement loginBtn = $(By.linkText("Sign in!"));
 
 

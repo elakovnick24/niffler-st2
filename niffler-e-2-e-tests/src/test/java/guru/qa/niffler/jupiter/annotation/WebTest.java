@@ -1,10 +1,7 @@
 package guru.qa.niffler.jupiter.annotation;
 
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.GenerateCategoryExtension;
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
+import guru.qa.niffler.jupiter.extension.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import guru.qa.niffler.jupiter.extension.GenerateSpendExtension;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,8 +13,9 @@ import java.lang.annotation.Target;
 @ExtendWith({
         BrowserExtension.class,
         GenerateSpendExtension.class,
-        GenerateCategoryExtension.class})
-        //EnvironmentExecutionCondition.class})
+        GenerateCategoryExtension.class,
+        ApiLoginExtension.class})
+//EnvironmentExecutionCondition.class})
 public @interface WebTest {
 
 }

@@ -2,6 +2,7 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.test.page.*;
 import guru.qa.niffler.test.page.component.Header;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.AfterEach;
 
 @WebTest
 public abstract class BaseWebTest {
+
+  protected static final Config CFG = Config.getConfig();
+
   static {
     Configuration.browserSize = "1920x1080";
     Configuration.browser = "chrome";
