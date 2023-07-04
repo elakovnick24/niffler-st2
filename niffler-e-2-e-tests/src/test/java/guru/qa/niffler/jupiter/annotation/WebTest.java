@@ -1,6 +1,7 @@
 package guru.qa.niffler.jupiter.annotation;
 
 import guru.qa.niffler.jupiter.extension.*;
+import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -11,6 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @ExtendWith({
+        AllureJunit5.class,
         BrowserExtension.class,
         GenerateSpendExtension.class,
         GenerateCategoryExtension.class,
@@ -19,7 +21,6 @@ import java.lang.annotation.Target;
 public @interface WebTest {
 
 }
-
 
 //TODO: Включить после доработки EnvironmentExecutionCondition
 //    WebTestExecutionEnvironment enabledFor();

@@ -65,7 +65,7 @@ public class CreateUserDBExtension implements
             usersDAO.createUser(entity);
         }
         context.getStore(USER_DB_NAMESPACE).put(testId + "user", userEntity);
-        context.getStore(USER_DB_NAMESPACE).put(testId + "dao", userEntity);
+        context.getStore(USER_DB_NAMESPACE).put(testId + "dao", usersDAO);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CreateUserDBExtension implements
     public UserEntity resolveParameter(ParameterContext parameterContext,
                                        ExtensionContext extensionContext) throws ParameterResolutionException {
         final String testId = extensionContext.getRequiredTestClass() + extensionContext.getRequiredTestMethod().toString();
-        List<UserEntity> userEntityList = extensionContext.getStore(USER_DB_NAMESPACE).get(testId, List.class);
+        List<UserEntity> userEntityList = extensionContext.getStore(USER_DB_NAMESPACE).get(testId + "user", List.class);
         return userEntityList.get(parameterContext.getIndex());
     }
 
