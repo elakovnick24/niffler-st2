@@ -1,7 +1,11 @@
 package guru.qa.niffler.service;
 
+import com.google.protobuf.Empty;
+import guru.qa.grpc.niffler.grpc.CurrencyResponse;
+import guru.qa.grpc.niffler.grpc.CurrencyValues;
 import guru.qa.niffler.data.CurrencyEntity;
 import guru.qa.niffler.data.repository.CurrencyRepository;
+import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,18 +14,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static guru.qa.niffler.data.CurrencyValues.EUR;
-import static guru.qa.niffler.data.CurrencyValues.KZT;
-import static guru.qa.niffler.data.CurrencyValues.RUB;
-import static guru.qa.niffler.data.CurrencyValues.USD;
-
-import static org.mockito.Mockito.lenient;
+import static guru.qa.niffler.data.CurrencyValues.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GrpcCurrencyServiceTest {
@@ -77,13 +78,35 @@ class GrpcCurrencyServiceTest {
 
     @Test
     void getAllCurrencies() {
+        StreamObserver<CurrencyResponse> responseStreamObserver = Mockito.mock(StreamObserver.class);
+        Empty defaultInstanceRequest = Empty.getDefaultInstance();
+        grpcCurrencyService.getAllCurrencies(defaultInstanceRequest, responseStreamObserver);
+        verify(responseStreamObserver, times(1)).onNext(any());
+        verify(responseStreamObserver, times(1)).onCompleted();
     }
 
     @Test
     void calculateRate() {
+        StreamObserver<CurrencyResponse> responseStreamObserver = mock(StreamObserver.class);
+        Empty defaultInstanceRequest = Empty.getDefaultInstance();
+        grpcCurrencyService.getAllCurrencies(defaultInstanceRequest, responseStreamObserver);
+        verify(responseStreamObserver, times(1)).onNext(any());
+        verify(responseStreamObserver, times(1)).onCompleted();
     }
 
-    @Test
-    void courseForCurrency () {
+    // Negative values
+    static Stream<Arguments> courseForCurrency() {
+        return Stream.of(
+                Arguments.of(guru.qa.grpc.niffler.grpc.CurrencyValues.RUB, 7.77),
+                Arguments.of(guru.qa.grpc.niffler.grpc.CurrencyValues.USD, 6.666),
+                Arguments.of(guru.qa.grpc.niffler.grpc.CurrencyValues.EUR, 0.999),
+                Arguments.of(guru.qa.grpc.niffler.grpc.CurrencyValues.KZT, 2.345)
+        );
+    }
+    @MethodSource
+    @ParameterizedTest
+    void courseForCurrency(CurrencyValues currencyValues, double expectedResult) {
+        BigDecimal actualCourseForCurrency = grpcCurrencyService.courseForCurrency(currencyValues, testCurrencies);
+        Assertions.assertEquals(expectedResult, actualCourseForCurrency.doubleValue());
     }
 }
