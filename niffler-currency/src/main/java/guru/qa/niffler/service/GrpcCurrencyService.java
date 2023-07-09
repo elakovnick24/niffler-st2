@@ -60,7 +60,7 @@ public class GrpcCurrencyService extends NifflerCurrencyServiceGrpc.NifflerCurre
         responseObserver.onCompleted();
     }
 
-    private @Nonnull
+    @Nonnull
     BigDecimal convertSpendTo(double spend,
                               @Nonnull CurrencyValues spendCurrency,
                               @Nonnull CurrencyValues desiredCurrency,
@@ -72,7 +72,7 @@ public class GrpcCurrencyService extends NifflerCurrencyServiceGrpc.NifflerCurre
         return spendInUsd.divide(courseForCurrency(desiredCurrency, currencyRates), 2, RoundingMode.HALF_UP);
     }
 
-    private @Nonnull
+    @Nonnull
     BigDecimal courseForCurrency(@Nonnull CurrencyValues currency,
                                  @Nonnull List<CurrencyEntity> currencyRates) {
         return BigDecimal.valueOf(
