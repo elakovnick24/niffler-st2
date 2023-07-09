@@ -18,4 +18,6 @@ public interface Config {
 
     String getAuthUrl();
     String getFrontUrl();
+
+    String getUserUrl();
 }

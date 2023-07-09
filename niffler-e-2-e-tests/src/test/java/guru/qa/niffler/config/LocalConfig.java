@@ -36,4 +36,9 @@ public class LocalConfig implements Config{
     public String getFrontUrl() {
         return "http://127.0.0.1:3000";
     }
+
+    @Override
+    public String getUserUrl() {
+        return "http://127.0.0.1:8090";
+    }
 }

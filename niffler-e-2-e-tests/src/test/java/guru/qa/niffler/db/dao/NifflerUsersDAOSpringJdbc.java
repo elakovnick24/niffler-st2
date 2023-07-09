@@ -12,7 +12,6 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -65,9 +64,15 @@ public class NifflerUsersDAOSpringJdbc implements NifflerUsersDAO {
 
     @Override
     public String getUserId(String username) {
-        return jdbcTemplate.query("SELECT FROM users WHERE id = ?", rs -> {return rs.getString(1);},
+        return jdbcTemplate.query("SELECT FROM users WHERE username = ?", rs -> {return rs.getString(1);},
                 username
         );
+    }
+
+    @Override
+    public UserEntity getUser(String username) {
+        return jdbcTemplate.query("SELECT FROM users WHERE username = ?", new Object[]{username}, new BeanPropertyRowMapper<>(UserEntity.class))
+                .stream().findAny().orElse(null);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class NifflerUsersDAOSpringJdbc implements NifflerUsersDAO {
     }
 
     @Override
-    public int removeUser(UserEntity user) throws SQLException {
+    public int removeUser(UserEntity user) {
         return transactionTemplate.execute(st -> {
             jdbcTemplate.update("DELETE FROM authorities WHERE user_id = ?", user.getId());
             return jdbcTemplate.update("DELETE FROM users WHERE id = ?", user.getId());

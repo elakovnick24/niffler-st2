@@ -32,7 +32,7 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
         final SessionContext sessionContext = SessionContext.getInstance();
         final CookieContext cookieContext = CookieContext.getInstance();
         final String codeVerifier = OauthUtils.generateCodeVerifier();
-        final String codeChallenge = OauthUtils.generateCodeChallange(codeVerifier);
+        final String codeChallenge = OauthUtils.generateCodeChallenge(codeVerifier);
         sessionContext.setCodeVerifier(codeVerifier);
         sessionContext.setCodeChallenge(codeChallenge);
 
@@ -48,7 +48,7 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
     }
 
     @Override
-    public void afterTestExecution(ExtensionContext context) throws Exception {
+    public void afterTestExecution(ExtensionContext context) {
         SessionContext.getInstance().release();
         CookieContext.getInstance().release();
     }

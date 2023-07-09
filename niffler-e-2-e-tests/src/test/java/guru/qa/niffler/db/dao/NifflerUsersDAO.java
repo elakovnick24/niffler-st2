@@ -11,6 +11,8 @@ public interface NifflerUsersDAO {
     PasswordEncoder encoder = createDelegatingPasswordEncoder();
     int createUser(UserEntity user);
 
+    UserEntity getUser(String username);
+
     UserEntity getUser(UserEntity userEntity);
 
 

@@ -70,6 +70,11 @@ public class NifflerUsersDAOJdbc implements NifflerUsersDAO {
     }
 
     @Override
+    public UserEntity getUser(String username) {
+        return null;
+    }
+
+    @Override
     public UserEntity getUser(UserEntity userEntity) {
         UserEntity user = null;
         try (Connection conn = ds.getConnection();

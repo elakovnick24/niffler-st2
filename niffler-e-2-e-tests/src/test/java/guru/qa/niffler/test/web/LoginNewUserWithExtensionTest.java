@@ -17,8 +17,7 @@ public class LoginNewUserWithExtensionTest extends BaseWebTest {
     @AllureId("105")
     @Test
     void loginTest(@GenerateUserWith(
-            clientDB = SPRING_JDBC,
-            deleteUserAfterEach = false) UserEntity user) {
+            clientDB = SPRING_JDBC) UserEntity user) {
         Selenide.open(StartPage.URL, StartPage.class)
                 .checkThatPageLoaded()
                 .openLoginForm()

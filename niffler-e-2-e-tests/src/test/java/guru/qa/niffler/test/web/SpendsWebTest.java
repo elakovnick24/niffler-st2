@@ -1,10 +1,11 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.GenerateUser;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.AllureId;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ public class SpendsWebTest extends BaseWebTest {
             amount = 52000.00,
             category = "Relocate"
     )
-    @ApiLogin(username = "nick", password = "12345")
+    @GenerateUser(username = "asdad")
     @AllureId("777")
     @Test
     void spendShouldBeDeletedByActionInTable(SpendJson spend) {
@@ -26,5 +27,12 @@ public class SpendsWebTest extends BaseWebTest {
                 .findFirstRowInSpendTableAndSelect(spend)
                 .tapOnDeleteSelected()
                 .spendingTableIsEmpty();
+    }
+
+    @GenerateUser(username = "Name"
+    )
+    @Test
+    void generateUserApi(UserJson userJson) {
+        System.out.println(userJson);
     }
 }

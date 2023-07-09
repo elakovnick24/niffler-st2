@@ -3,16 +3,17 @@ package guru.qa.niffler.test.page;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.condition.SpendCondition;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.test.page.component.Header;
-import org.hibernate.query.sqm.sql.FromClauseIndex;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static guru.qa.niffler.condition.SpendCondition.spends;
 
 public class MainPage extends BasePage {
 
@@ -62,6 +63,7 @@ public class MainPage extends BasePage {
 
     public MainPage findFirstRowInSpendTableAndSelect(SpendJson spend) {
         bodyTable
+                .shouldHave(spends(spend))
                 .find(text(spend.getDescription()))
                 .$$("td").first()
                 .scrollTo()

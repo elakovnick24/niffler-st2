@@ -8,7 +8,7 @@ import guru.qa.niffler.test.page.*;
 import guru.qa.niffler.test.page.component.Header;
 import org.junit.jupiter.api.AfterEach;
 
-@WebTest
+
 public abstract class BaseWebTest {
 
   protected static final Config CFG = Config.getConfig();

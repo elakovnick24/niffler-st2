@@ -2,27 +2,31 @@ package guru.qa.niffler.jupiter.extension;
 
 import com.github.javafaker.Faker;
 import guru.qa.niffler.db.dao.NifflerUsersDAO;
-import guru.qa.niffler.db.dao.NifflerUsersDAOJdbc;
-import guru.qa.niffler.db.entity.Authority;
 import guru.qa.niffler.db.dao.NifflerUsersDAOHibernate;
+import guru.qa.niffler.db.dao.NifflerUsersDAOJdbc;
 import guru.qa.niffler.db.dao.NifflerUsersDAOSpringJdbc;
+import guru.qa.niffler.db.entity.Authority;
 import guru.qa.niffler.db.entity.AuthorityEntity;
 import guru.qa.niffler.db.entity.UserEntity;
 import guru.qa.niffler.jupiter.annotation.GenerateUserWith;
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 
 import java.lang.reflect.Parameter;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static guru.qa.niffler.jupiter.annotation.GenerateUserWith.ClientDB.*;
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 
 public class CreateUserDBExtension implements
         BeforeEachCallback,
         ParameterResolver,
         AfterEachCallback {
 
-    public static ExtensionContext.Namespace USER_DB_NAMESPACE = ExtensionContext.Namespace
-            .create(CreateUserDBExtension.class);
-
+    public static Namespace USER_DB_NAMESPACE = create(CreateUserDBExtension.class);
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
@@ -37,13 +41,13 @@ public class CreateUserDBExtension implements
 
         for (Parameter parameter : parameters) {
             GenerateUserWith annotation = parameter.getAnnotation(GenerateUserWith.class);
-            if (GenerateUserWith.ClientDB.JDBC.equals(annotation.clientDB())) {
+            if (JDBC.equals(annotation.clientDB())) {
                 usersDAO = new NifflerUsersDAOJdbc();
             }
-            if (GenerateUserWith.ClientDB.SPRING_JDBC.equals(annotation.clientDB())) {
+            if (SPRING_JDBC.equals(annotation.clientDB())) {
                 usersDAO = new NifflerUsersDAOSpringJdbc();
             }
-            if (GenerateUserWith.ClientDB.HIBERNATE.equals(annotation.clientDB())) {
+            if (HIBERNATE.equals(annotation.clientDB())) {
                 usersDAO = new NifflerUsersDAOHibernate();
             }
             UserEntity entity = new UserEntity();

@@ -3,6 +3,7 @@ package guru.qa.niffler.condition;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.impl.CollectionSource;
+import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,8 @@ import org.openqa.selenium.WebElement;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
+
+import static guru.qa.niffler.helpers.DateFormatConverter.convertWebElementFormatToSpendJsonFormatDate;
 
 public class SpendCondition {
 
@@ -27,7 +30,7 @@ public class SpendCondition {
                             timeoutMs);
                 } else {
                     throw new SpendsMismatch(collection,
-                            Arrays.asList(expectedSpends),elements.stream().map(
+                            Arrays.asList(expectedSpends), elements.stream().map(
                             SpendCondition::convertWebElementToSpendJson).toList(),
                             explanation,
                             timeoutMs);
@@ -48,7 +51,7 @@ public class SpendCondition {
                 for (int i = 0; i < expectedSpends.length; i++) {
                     WebElement row = webElements.get(i);
                     SpendJson expectedSpend = expectedSpends[i];
-                    if (!spendRowEqualsSpend(row, expectedSpend)) {
+                    if (!spendRowEqualsSpend(convertWebElementToSpendJson(row), expectedSpend)) {
                         return false;
                     }
                 }
@@ -57,19 +60,29 @@ public class SpendCondition {
         };
     }
 
-    private static boolean spendRowEqualsSpend(WebElement row, SpendJson expectedSpend) {
-        return row.findElements(By.cssSelector("td")).get(1).getText().equals(expectedSpend.getSpendDate().toString())
-                && row.findElements(By.cssSelector("td")).get(2).getText().equals(expectedSpend.getAmount().toString())
-                && row.findElements(By.cssSelector("td")).get(3).getText().equals(expectedSpend.getCurrency().toString())
-                && row.findElements(By.cssSelector("td")).get(4).getText().equals(expectedSpend.getCategory().toString())
-                && row.findElements(By.cssSelector("td")).get(5).getText().equals(expectedSpend.getDescription().toString());
+    private static boolean spendRowEqualsSpend(SpendJson actualSpend, SpendJson expectedSpend) {
+        return
+                actualSpend.getSpendDate().toString().equals(expectedSpend.getSpendDate().toString())
+                && actualSpend.getAmount().toString().equals(expectedSpend.getAmount().toString())
+                && actualSpend.getCurrency().toString().equals(expectedSpend.getCurrency().toString())
+                && actualSpend.getCategory().toString().equals(expectedSpend.getCategory().toString())
+                && actualSpend.getDescription().toString().equals(expectedSpend.getDescription().toString());
 
     }
 
     private static SpendJson convertWebElementToSpendJson(WebElement row) {
         SpendJson sj = new SpendJson();
-        sj.setSpendDate(null);
-        sj.setAmount(Double.valueOf(row.findElements(By.cssSelector("td")).get(2).getText()));
+        String webElementDate = row.findElements(By.cssSelector("td")).get(1).getText();
+        String amount = row.findElements(By.cssSelector("td")).get(2).getText();
+        CurrencyValues currency = CurrencyValues.valueOf(row.findElements(By.cssSelector("td")).get(3).getText());
+        String category = row.findElements(By.cssSelector("td")).get(4).getText();
+        String description = row.findElements(By.cssSelector("td")).get(5).getText();
+
+        sj.setSpendDate(convertWebElementFormatToSpendJsonFormatDate(webElementDate));
+        sj.setAmount(Double.valueOf(amount));
+        sj.setCurrency(currency);
+        sj.setCategory(category);
+        sj.setDescription(description);
         return sj;
     }
 

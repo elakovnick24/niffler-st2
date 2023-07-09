@@ -24,6 +24,7 @@ public class UpdateUserDataTest {
     @ParameterizedTest
     void updateUserDataTest(@ClassPathUser UserJson user) throws IOException {
 
+        // TODO: Переписать через UserClient
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .build();
 

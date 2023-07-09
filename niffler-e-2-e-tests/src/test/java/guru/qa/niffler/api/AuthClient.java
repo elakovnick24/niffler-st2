@@ -70,6 +70,29 @@ public class AuthClient extends BaseRestClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    public void registerGetToken() {
+        try {
+            authService.registrationGetToken().execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void register(String username, String password, String submitPassword) {
+        final CookieContext cookieContext = CookieContext.getInstance();
+        try {
+            authService.register(
+                    cookieContext.getFormattedCookie("XSRF-TOKEN"),
+                    cookieContext.getCookie("XSRF-TOKEN"),
+                    username,
+                    password,
+                    submitPassword
+            ).execute();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
 }

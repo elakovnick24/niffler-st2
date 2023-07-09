@@ -25,34 +25,4 @@ public class FriendsPage extends BasePage {
         return this;
     }
 
-    public FriendsPage addFriend(String username) {
-        $(By.xpath("//main//div[@class='people-content']//tbody//tr//td[contains(text(), '"
-                + username + "')]//following-sibling::td//button")).click();
-        return this;
-    }
-
-    public FriendsPage submitInvitation(String username) {
-        $(By.xpath("//main//div[@class='people-content']//tbody//tr//td[contains(text(), '"
-                + username + "')]//following-sibling::td//button")).click();
-        return this;
-    }
-
-    public FriendsPage declineInvitation(String username) {
-        $(By.xpath("//main//div[@class='people-content']//tbody//tr//td[contains(text(), '"
-                + username + "')]//following-sibling::td//button")).click();
-        return this;
-    }
-
-    public FriendsPage shouldHasActionAddFriend(String username) {
-        $(By.xpath("//main//div[@class='people-content']//tbody//tr//td[contains(text(), '"
-                + username + "')]//following-sibling::td//button")).click();
-        return this;
-    }
-
-    public FriendsPage shouldHasActionSubmitAndDecline(String username) {
-        $(By.xpath("//main//div[@class='people-content']//tbody//tr//td[contains(text(), '"
-                + username + "')]//following-sibling::td//button")).click();
-        return this;
-    }
-
 }

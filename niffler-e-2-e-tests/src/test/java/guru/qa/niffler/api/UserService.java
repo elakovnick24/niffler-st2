@@ -13,6 +13,7 @@ public interface UserService {
     Call<UserJson> updateUserData(@Body UserJson userJson);
 
     @GET("/currentUser")
-    Call<UserJson> getCurrentUserOrCreateIfAbsent(@Query("username") String username);
-
+    Call<UserJson> getCurrentUserOrCreateIfAbsent(
+            @Query("username") String username);
 }
+

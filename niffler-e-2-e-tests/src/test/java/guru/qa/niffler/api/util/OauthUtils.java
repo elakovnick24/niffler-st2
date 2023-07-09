@@ -14,7 +14,7 @@ public class OauthUtils {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(codeVerifier);
     }
 
-    public static String generateCodeChallange(String codeVerifier) {
+    public static String generateCodeChallenge(String codeVerifier) {
         byte[] bytes = new byte[0];
         try {
             bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);

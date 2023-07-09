@@ -17,7 +17,6 @@ public class CookieContext {
         return INSTANCE.get();
     }
 
-
     public void setCookie(String key, String cookie) {
         storage.put(key, cookie);
     }
