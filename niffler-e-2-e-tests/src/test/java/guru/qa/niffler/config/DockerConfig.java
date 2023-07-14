@@ -41,4 +41,14 @@ public class DockerConfig implements Config{
     public String getUserUrl() {
         return "http://niffler-userdata:8090";
     }
+
+    @Override
+    public String getCurrencyGrpcAddress() {
+        return "niffler-currency";
+    }
+
+    @Override
+    public int getCurrencyGrpcPort() {
+        return 8092;
+    }
 }

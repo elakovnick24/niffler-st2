@@ -20,4 +20,8 @@ public interface Config {
     String getFrontUrl();
 
     String getUserUrl();
+
+    String getCurrencyGrpcAddress();
+
+    int getCurrencyGrpcPort();
 }
