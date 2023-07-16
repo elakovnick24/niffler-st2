@@ -59,6 +59,6 @@ public class DockerConfig implements Config{
 
     @Override
     public int getSpendGrpcPort() {
-        return 9090;
+        return 8094;
     }
 }

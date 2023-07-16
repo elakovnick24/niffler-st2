@@ -1,11 +1,12 @@
 package niffler.service;
 
-import com.google.protobuf.Empty;
 import guru.qa.grpc.niffler.grpc.*;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import niffler.data.CategoryEntity;
 import niffler.data.repository.CategoryRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class GrpcCategoryService extends NifflerCategoryServiceGrpc.NifflerCateg
 
     private final CategoryRepository categoryRepository;
     private final GrpcCurrencyClient grpcCurrencyClient;
+    private static final int MAX_CATEGORIES_SIZE = 7;
 
     public GrpcCategoryService(CategoryRepository categoryRepository,
                                GrpcCurrencyClient grpcCurrencyClient) {
@@ -23,10 +25,8 @@ public class GrpcCategoryService extends NifflerCategoryServiceGrpc.NifflerCateg
     }
 
     @Override
-    public void getAllCategories(Empty request,
-                                 StreamObserver<guru.qa.grpc.niffler.grpc.CategoriesResponse> responseObserver) {
-        List<CategoryEntity> all = categoryRepository.findAll();
-
+    public void getAllCategories(CategoriesRequest request, StreamObserver<CategoriesResponse> responseObserver) {
+        List<CategoryEntity> all = categoryRepository.findAllByUsername(request.getUsername());
         CategoriesResponse response = CategoriesResponse.newBuilder()
                 .addAllCategories(all.stream()
                         .map(categoryEntity -> Category.newBuilder()
@@ -42,6 +42,10 @@ public class GrpcCategoryService extends NifflerCategoryServiceGrpc.NifflerCateg
 
     @Override
     public void addCategory(CategoryRequest request, StreamObserver<CategoryResponse> responseObserver) {
+        if (categoryRepository.findAllByUsername(request.getUsername()).size() > MAX_CATEGORIES_SIZE) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+                    "Can`t add over than 7 categories for user: '" + request.getUsername());
+        }
         CategoryEntity categoryEntity = new CategoryEntity();
         CategoryResponse categoryResponse;
         final String category = request.getCategory();
@@ -52,9 +56,11 @@ public class GrpcCategoryService extends NifflerCategoryServiceGrpc.NifflerCateg
         categoryRepository.save(categoryEntity);
 
         categoryResponse = CategoryResponse.newBuilder()
-                .setId(String.valueOf(categoryEntity.getId()))
-                .setCategory(request.getCategory())
-                .setUsername(request.getUsername())
+                .setUsername(categoryEntity.getUsername())
+                .setCategory(Category.newBuilder()
+                        .setCategory(categoryEntity.getCategory())
+                        .setId(categoryEntity.getId().toString()).build())
+                .setUsername(categoryEntity.getUsername())
                 .build();
 
         responseObserver.onNext(categoryResponse);

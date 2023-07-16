@@ -7,13 +7,18 @@ option java_package = "guru.qa.grpc.niffler.grpc";
 option java_outer_classname = "NifflerCategoryProto";
 
 service NifflerCategoryService {
-  rpc GetAllCategories(google.protobuf.Empty) returns (CategoriesResponse) {}
+  rpc GetAllCategories(CategoriesRequest) returns (CategoriesResponse) {}
   rpc AddCategory (CategoryRequest) returns (CategoryResponse) {}
 }
 
+message CategoriesRequest {
+  string username = 1;
+}
+
 message CategoryRequest {
-  string category = 1;
-  string username = 2;
+  string username = 1;
+  CategoryReq category = 2;
+
 }
 
 message CategoriesResponse {
@@ -21,14 +26,19 @@ message CategoriesResponse {
 }
 
 message CategoryResponse {
-  string id = 1;
-  string category = 2;
-  string username = 3;
+  string username = 1;
+  Category category = 2;
 }
 
 message Category {
-  string category = 1;
-  string username = 2;
+  string username = 1;
+  string id = 2;
+  string category = 3;
+}
+
+message CategoryReq {
+  string username = 1;
+  string category = 2;
 }
 
 
