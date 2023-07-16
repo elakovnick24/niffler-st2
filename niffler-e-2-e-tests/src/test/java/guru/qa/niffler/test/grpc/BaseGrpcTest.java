@@ -10,6 +10,7 @@ import io.grpc.Channel;
 import io.grpc.ManagedChannelBuilder;
 import io.qameta.allure.grpc.AllureGrpc;
 
+import static guru.qa.grpc.niffler.grpc.NifflerCategoryServiceGrpc.*;
 import static guru.qa.grpc.niffler.grpc.NifflerCurrencyServiceGrpc.NifflerCurrencyServiceBlockingStub;
 
 @GrpcTest
@@ -41,5 +42,5 @@ public class BaseGrpcTest {
             NifflerCurrencyServiceGrpc.newBlockingStub(currencyChannel);
 
     protected final NifflerCategoryServiceBlockingStub categoryStub =
-            NifflerCategoryServiceGrpc.newBlockingStub(spendChannel);
+            newBlockingStub(spendChannel);
 }
