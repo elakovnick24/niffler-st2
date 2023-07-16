@@ -48,7 +48,7 @@ public class GrpcCategoryService extends NifflerCategoryServiceGrpc.NifflerCateg
         }
         CategoryEntity categoryEntity = new CategoryEntity();
         CategoryResponse categoryResponse;
-        final String category = request.getCategory();
+        final String category = request.getCategory().getCategory();
         final String username = request.getUsername();
 
         categoryEntity.setCategory(category);
