@@ -1,22 +1,36 @@
-syntax = "proto3";
+// Файл описывает схему данных, используемую в сервисе NifflerCurrencyService для запроса информации о валютах и расчета конверсии между валютами.
 
+// Указывает, что используется синтаксис "proto3".
+syntax = "proto3";
+// импортирует файл "empty.proto" из пакета "google/protobuf".
+// Этот файл содержит определение типа google.protobuf.Empty, который используется в определении запроса GetAllCurrencies в качестве входного параметра.
 import "google/protobuf/empty.proto";
 
+// Определяет пространство имен для пакета, в котором находятся все остальные определения.
 package guru.qa.grpc.niffler;
 
+// Задаются опции для генерации кода на языке Java.
+// Опция java_multiple_files указывает, что код должен быть сгенерирован в несколько файлов.
 option java_multiple_files = true;
+// Опция java_package определяет пакет, в котором будет сгенерирован Java-код.
 option java_package = "guru.qa.grpc.niffler.grpc";
+// Опция java_outer_classname задает имя класса оболочки для сгенерированного кода.
 option java_outer_classname = "NifflerCurrencyProto";
 
+// Определяет сервис NifflerCurrencyService со следующими двумя RPC-методами:
 service NifflerCurrencyService {
+  //GetAllCurrencies: Метод, принимающий объект типа google.protobuf.Empty в качестве входного параметра и возвращающий объект типа CurrencyResponse.
   rpc GetAllCurrencies (google.protobuf.Empty) returns (CurrencyResponse) {}
+  // CalculateRate: Метод, принимающий объект типа CalculateRequest в качестве входного параметра и возвращающий объект типа CalculateResponse.
   rpc CalculateRate (CalculateRequest) returns (CalculateResponse) {}
 }
 
+// Определение сообщения CurrencyResponse содержит повторяющееся поле currencies типа Currency. То есть, CurrencyResponse представляет собой список валют.
 message CurrencyResponse {
   repeated Currency currencies = 1;
 }
 
+// Определение сообщения Currency содержит два поля:
 message Currency {
   CurrencyValues currency = 1;
   double currencyRate = 2;

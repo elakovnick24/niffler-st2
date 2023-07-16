@@ -51,4 +51,14 @@ public class DockerConfig implements Config{
     public int getCurrencyGrpcPort() {
         return 8092;
     }
+
+    @Override
+    public String getSpendGrpcAddress() {
+        return "niffler-spend";
+    }
+
+    @Override
+    public int getSpendGrpcPort() {
+        return 9090;
+    }
 }

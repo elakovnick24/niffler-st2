@@ -4,6 +4,10 @@ server:
     include:
       message: true
 
+grpc:
+  server:
+    port: 9090
+
 spring:
   application:
     name: niffler-spend

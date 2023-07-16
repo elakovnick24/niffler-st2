@@ -1,0 +1,35 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package guru.qa.grpc.niffler;
+
+option java_multiple_files = true;
+option java_package = "guru.qa.grpc.niffler.grpc";
+option java_outer_classname = "NifflerCategoryProto";
+
+service NifflerCategoryService {
+  rpc GetAllCategories(google.protobuf.Empty) returns (CategoriesResponse) {}
+  rpc AddCategory (CategoryRequest) returns (CategoryResponse) {}
+}
+
+message CategoryRequest {
+  string category = 1;
+  string username = 2;
+}
+
+message CategoriesResponse {
+  repeated Category categories = 1;
+}
+
+message CategoryResponse {
+  string id = 1;
+  string category = 2;
+  string username = 3;
+}
+
+message Category {
+  string category = 1;
+  string username = 2;
+}
+
+
+

@@ -51,4 +51,14 @@ public class LocalConfig implements Config{
     public int getCurrencyGrpcPort() {
         return 8092;
     }
+
+    @Override
+    public String getSpendGrpcAddress() {
+        return "localhost";
+    }
+
+    @Override
+    public int getSpendGrpcPort() {
+        return 9090;
+    }
 }
