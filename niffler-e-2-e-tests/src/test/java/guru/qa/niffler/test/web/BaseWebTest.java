@@ -3,7 +3,6 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.annotation.WebTest;
 import guru.qa.niffler.test.page.*;
 import guru.qa.niffler.test.page.component.Header;
 import org.junit.jupiter.api.AfterEach;
