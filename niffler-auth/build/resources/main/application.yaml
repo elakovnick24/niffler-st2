@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 9000
   # ONLY FOR TESTING
   servlet:
     session:
@@ -56,7 +56,7 @@ spring:
 niffler-front:
   base-uri: 'http://127.0.0.1:3000'
 niffler-auth:
-  base-uri: 'http://127.0.0.1:9001'
+  base-uri: 'http://127.0.0.1:9000'
 ---
 spring:
   config:
@@ -68,7 +68,7 @@ spring:
     hibernate:
       ddl-auto: validate
 niffler-front:
-  base-uri: 'http://niffler-frontend'
+  base-uri: 'http://frontend.niffler.dc'
 niffler-auth:
-  base-uri: 'http://niffler-auth:9000'
+  base-uri: 'http://auth.niffler.dc:9000'
 ---
